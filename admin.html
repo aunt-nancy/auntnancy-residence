@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aunt Nancy Admin</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+:root{--pine:#14301e;--deep:#0d2115;--moss:#1e4a2e;--gold:#f5c842;--cream:#fdf8ee;--ink:#16211a;--brass:#8c6410;--muted:#667066}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:15px/1.5 Arial,sans-serif}
+button,input,select{font:inherit}.wrap{max-width:1180px;margin:auto;padding:0 22px}
+.top{background:var(--pine);color:#fff;padding:18px 0}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font:600 23px Georgia,serif}.brand small{display:block;font:700 10px Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:3px}
+.btn{border:0;border-radius:5px;padding:11px 16px;font-weight:800;cursor:pointer}.gold{background:var(--gold);color:var(--pine)}.outline{background:#fff;border:1px solid #cfc7b6;color:var(--pine)}
+main{padding:34px 0 55px}.panel{background:#fff;border:1px solid #e3dccb;border-radius:9px;padding:24px}
+h1,h2,h3{font-family:Georgia,serif;margin:0}h1{font-size:31px}h2{font-size:24px}.muted{color:var(--muted)}
+.login{max-width:520px;margin:50px auto}.login label{display:block;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--brass);margin:18px 0 6px}
+.login input{width:100%;padding:12px;border:1px solid #d9d2c2;border-radius:5px;background:#faf8f2}.login .btn{width:100%;margin-top:14px}
+.admin{display:none}.admin.show{display:block}.login.hide{display:none}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+.tabs{display:flex;gap:7px;flex-wrap:wrap}.tab{background:#fff;border:1px solid #d7cfbd;padding:10px 14px;border-radius:999px;font-weight:800;cursor:pointer}.tab.active{background:var(--pine);color:#fff;border-color:var(--pine)}
+.view{display:none}.view.active{display:block}
+.tablewrap{overflow:auto;border:1px solid #e6dfcf;border-radius:8px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:800px}th,td{padding:12px 13px;border-bottom:1px solid #eee8dc;text-align:left;vertical-align:top}th{background:#f8f3e8;color:#475247;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.status{border:1px solid #d8d0bf;border-radius:4px;padding:7px;background:#fff}.linkbtn{border:0;background:none;color:var(--brass);font-weight:800;text-decoration:underline;cursor:pointer;padding:0}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.notice{border:1px solid #ead7a2;background:#fff8df;border-radius:6px;padding:11px 13px;margin:14px 0;font-size:13px}
+.err{color:#8a2020;background:#fdecec;border:1px solid #e9c3c3;border-radius:6px;padding:10px;display:none;margin-top:12px}
+dialog{border:0;padding:0;background:transparent;width:min(900px,calc(100% - 24px));max-height:92vh}dialog::backdrop{background:rgba(8,20,12,.72)}
+.card{background:var(--cream);border-top:4px solid var(--gold);border-radius:8px;padding:24px;max-height:92vh;overflow:auto;position:relative}.x{position:absolute;right:12px;top:7px;border:0;background:none;font-size:28px;cursor:pointer}
+.detailgrid{display:grid;grid-template-columns:220px 1fr;gap:0;border:1px solid #e1d9c9;border-radius:6px;overflow:hidden;margin-top:16px}.detailgrid div{padding:9px 11px;border-bottom:1px solid #eee8dc}.detailgrid .k{background:#f8f3e8;font-weight:800;color:#4e594f}.sensitive{font-family:monospace;letter-spacing:.05em}
+.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 0}.modal-actions .btn{flex:1}
+.video-box{margin-top:16px;padding:16px;border:1px solid #e1d9c9;border-radius:6px;background:#fff}
+#magicMsg{margin-top:14px;color:var(--moss);font-weight:700}
+@media(max-width:650px){.top .wrap{align-items:flex-start;flex-direction:column}.detailgrid{grid-template-columns:1fr}.detailgrid .k{border-top:1px solid #eee8dc}.panel{padding:16px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brand">Aunt Nancy<small>Residence Admin</small></div><button class="btn gold" id="backSite" type="button">Public Site</button></div></header>
+
+<main><div class="wrap">
+<section class="panel login" id="loginPanel">
+  <h1>Admin Sign In</h1>
+  <p class="muted">For privacy, applications and videos can only be opened after signing in as the Aunt Nancy administrator.</p>
+  <label>Administrator Email</label>
+  <input id="adminEmail" value="iamauntnancy@gmail.com" readonly>
+  <button class="btn gold" id="sendLink" type="button">Email Me a Sign-In Link</button>
+  <div id="magicMsg"></div>
+  <div class="err" id="loginError"></div>
+</section>
+
+<section class="admin" id="adminPanel">
+  <div class="toolbar">
+    <div><h1>Aunt Nancy Admin</h1><div class="muted" id="signedInAs"></div></div>
+    <button class="btn outline" id="signOut" type="button">Sign Out</button>
+  </div>
+  <div class="notice">Application details can contain Social Security, banking, credit-account, and identification information. Sensitive fields are masked until you choose to reveal them.</div>
+  <div class="tabs">
+    <button class="tab active" data-tab="applications">Applications</button>
+    <button class="tab" data-tab="rooms">Room Inquiries</button>
+    <button class="tab" data-tab="videos">Videos</button>
+  </div>
+
+  <section class="view active" id="view-applications">
+    <div class="toolbar"><h2>Applications</h2><button class="btn outline refresh" data-kind="applications">Refresh</button></div>
+    <div id="applicationsList" class="tablewrap"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section class="view" id="view-rooms">
+    <div class="toolbar"><h2>Room Inquiries</h2><button class="btn outline refresh" data-kind="rooms">Refresh</button></div>
+    <div id="roomsList" class="tablewrap"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section class="view" id="view-videos">
+    <div class="toolbar"><h2>Video Submissions</h2><button class="btn outline refresh" data-kind="videos">Refresh</button></div>
+    <div id="videosList" class="tablewrap"><div class="empty">Loading…</div></div>
+  </section>
+</section>
+</div></main>
+
+<dialog id="detailDlg"><div class="card">
+<button class="x" id="closeDetail" aria-label="Close">×</button>
+<h2 id="detailTitle">Application</h2>
+<div class="modal-actions">
+  <button class="btn outline" id="revealSensitive" type="button">Reveal Sensitive Fields</button>
+  <button class="btn outline" id="printDetail" type="button">Print Details</button>
+</div>
+<div id="detailBody"></div>
+</div></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL='https://hkrrxscyhtxmbvxevfkw.supabase.co';
+const SUPABASE_KEY='sb_publishable_QPwVWU-qNnc3GJb_FoFnlQ_kEHa3dtU';
+const ADMIN_ENDPOINT=SUPABASE_URL+'/functions/v1/aunt-nancy-admin';
+const ADMIN_EMAIL='iamauntnancy@gmail.com';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
+let session=null;
+let detailRecord=null;
+let sensitiveVisible=false;
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const human=k=>String(k).replaceAll('_',' ').replace(/\b\w/g,m=>m.toUpperCase());
+const fmtDate=v=>{if(!v)return '';const d=new Date(v);return isNaN(d)?v:d.toLocaleString()};
+const sensitiveKey=k=>/(social_security|driver|license|checking|savings|account|balance)/i.test(k);
+const mask=v=>v?'••••••••':'';
+
+document.getElementById('backSite').onclick=()=>location.href='/';
+document.getElementById('closeDetail').onclick=()=>document.getElementById('detailDlg').close();
+document.getElementById('detailDlg').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+document.getElementById('printDetail').onclick=()=>window.print();
+
+async function getSession(){
+  const {data}=await sb.auth.getSession();
+  session=data.session;
+  if(session?.user?.email?.toLowerCase()===ADMIN_EMAIL){
+    showAdmin();
+  }else{
+    showLogin();
+  }
+}
+
+function showLogin(){
+  document.getElementById('loginPanel').classList.remove('hide');
+  document.getElementById('adminPanel').classList.remove('show');
+}
+
+function showAdmin(){
+  document.getElementById('loginPanel').classList.add('hide');
+  document.getElementById('adminPanel').classList.add('show');
+  document.getElementById('signedInAs').textContent=session.user.email;
+  loadAll();
+}
+
+document.getElementById('sendLink').onclick=async()=>{
+  const btn=document.getElementById('sendLink');
+  const msg=document.getElementById('magicMsg');
+  const err=document.getElementById('loginError');
+  btn.disabled=true;err.style.display='none';msg.textContent='Sending…';
+  const {error}=await sb.auth.signInWithOtp({
+    email:ADMIN_EMAIL,
+    options:{emailRedirectTo:location.origin+'/admin.html',shouldCreateUser:true}
+  });
+  btn.disabled=false;
+  if(error){
+    msg.textContent='';
+    err.textContent=error.message;
+    err.style.display='block';
+  }else{
+    msg.textContent='Sign-in link sent to '+ADMIN_EMAIL+'. Open that email and click the link.';
+  }
+};
+
+document.getElementById('signOut').onclick=async()=>{
+  await sb.auth.signOut();
+  session=null;showLogin();
+};
+
+sb.auth.onAuthStateChange((event,newSession)=>{
+  session=newSession;
+  if(session?.user?.email?.toLowerCase()===ADMIN_EMAIL) showAdmin();
+});
+
+async function api(action,payload={}){
+  const {data}=await sb.auth.getSession();
+  session=data.session;
+  if(!session) throw new Error('Please sign in again.');
+  const res=await fetch(ADMIN_ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+    body:JSON.stringify({action,...payload})
+  });
+  const json=await res.json().catch(()=>({}));
+  if(!res.ok||!json.ok) throw new Error(json.error||'Request failed');
+  return json;
+}
+
+function statusSelect(kind,id,current){
+  const options=['new','reviewing','contacted','closed'];
+  return '<select class="status" data-kind="'+kind+'" data-id="'+id+'">'+options.map(x=>'<option '+(x===current?'selected':'')+'>'+x+'</option>').join('')+'</select>';
+}
+
+function wireStatuses(){
+  document.querySelectorAll('.status').forEach(s=>s.onchange=async()=>{
+    const old=s.dataset.old||'';
+    try{
+      s.disabled=true;
+      await api('update_status',{kind:s.dataset.kind,id:s.dataset.id,status:s.value});
+      s.dataset.old=s.value;
+    }catch(e){
+      alert('Status did not update: '+e.message);
+      if(old)s.value=old;
+    }finally{s.disabled=false}
+  });
+}
+
+async function loadApplications(){
+  const box=document.getElementById('applicationsList');
+  box.innerHTML='<div class="empty">Loading…</div>';
+  try{
+    const {rows}=await api('applications');
+    if(!rows.length){box.innerHTML='<div class="empty">No applications yet.</div>';return}
+    box.innerHTML='<table><thead><tr><th>Submitted</th><th>Applicant</th><th>Phone</th><th>Email</th><th>Status</th><th></th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td>'+esc(fmtDate(r.created_at))+'</td><td><strong>'+esc(r.full_name)+'</strong></td><td>'+esc(r.phone)+'</td><td>'+esc(r.email)+'</td><td>'+statusSelect('application',r.id,r.status)+'</td><td><button class="linkbtn viewApp" data-id="'+r.id+'">View</button></td></tr>').join('')+
+      '</tbody></table>';
+    document.querySelectorAll('.viewApp').forEach(b=>b.onclick=()=>openApplication(b.dataset.id));
+    document.querySelectorAll('.status').forEach(s=>s.dataset.old=s.value);wireStatuses();
+  }catch(e){box.innerHTML='<div class="empty">Could not load applications: '+esc(e.message)+'</div>'}
+}
+
+async function loadRooms(){
+  const box=document.getElementById('roomsList');
+  box.innerHTML='<div class="empty">Loading…</div>';
+  try{
+    const {rows}=await api('room_inquiries');
+    if(!rows.length){box.innerHTML='<div class="empty">No room inquiries yet.</div>';return}
+    box.innerHTML='<table><thead><tr><th>Submitted</th><th>Name</th><th>Phone</th><th>Email</th><th>Preference</th><th>Status</th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td>'+esc(fmtDate(r.created_at))+'</td><td><strong>'+esc(r.name)+'</strong></td><td>'+esc(r.phone)+'</td><td>'+esc(r.email||'')+'</td><td>'+esc(r.room_preference)+'</td><td>'+statusSelect('room',r.id,r.status)+'</td></tr>').join('')+
+      '</tbody></table>';
+    document.querySelectorAll('.status').forEach(s=>s.dataset.old=s.value);wireStatuses();
+  }catch(e){box.innerHTML='<div class="empty">Could not load room inquiries: '+esc(e.message)+'</div>'}
+}
+
+async function loadVideos(){
+  const box=document.getElementById('videosList');
+  box.innerHTML='<div class="empty">Loading…</div>';
+  try{
+    const {rows}=await api('videos');
+    if(!rows.length){box.innerHTML='<div class="empty">No video submissions yet.</div>';return}
+    box.innerHTML='<table><thead><tr><th>Submitted</th><th>Name</th><th>Phone</th><th>File</th><th>Size</th><th>Status</th><th></th></tr></thead><tbody>'+
+      rows.map(r=>'<tr><td>'+esc(fmtDate(r.created_at))+'</td><td><strong>'+esc(r.name)+'</strong></td><td>'+esc(r.phone)+'</td><td>'+esc(r.original_filename)+'</td><td>'+esc((Number(r.file_size)/1024/1024).toFixed(1))+' MB</td><td>'+statusSelect('video',r.id,r.status)+'</td><td><button class="linkbtn viewVideo" data-id="'+r.id+'">Open Video</button></td></tr>').join('')+
+      '</tbody></table>';
+    document.querySelectorAll('.viewVideo').forEach(b=>b.onclick=()=>openVideo(b.dataset.id));
+    document.querySelectorAll('.status').forEach(s=>s.dataset.old=s.value);wireStatuses();
+  }catch(e){box.innerHTML='<div class="empty">Could not load videos: '+esc(e.message)+'</div>'}
+}
+
+async function openApplication(id){
+  try{
+    const {row}=await api('application_detail',{id});
+    if(!row)throw new Error('Application not found');
+    detailRecord=row;sensitiveVisible=false;
+    document.getElementById('detailTitle').textContent='Application — '+row.full_name;
+    document.getElementById('revealSensitive').textContent='Reveal Sensitive Fields';
+    renderDetail();
+    document.getElementById('detailDlg').showModal();
+  }catch(e){alert(e.message)}
+}
+
+function renderDetail(){
+  const row=detailRecord||{};
+  const form=row.form_data&&typeof row.form_data==='object'?row.form_data:{};
+  const entries=Object.entries(form);
+  let html='<div class="detailgrid">';
+  html+='<div class="k">Submitted</div><div>'+esc(fmtDate(row.created_at))+'</div>';
+  html+='<div class="k">Status</div><div>'+esc(row.status||'')+'</div>';
+  if(!entries.length){
+    for(const [k,v] of Object.entries(row)){
+      if(['form_data','id','created_at','updated_at'].includes(k))continue;
+      html+='<div class="k">'+esc(human(k))+'</div><div>'+esc(v??'')+'</div>';
+    }
+  }else{
+    for(const [k,v] of entries){
+      const sensitive=sensitiveKey(k);
+      const shown=sensitive&&!sensitiveVisible?mask(v):v;
+      html+='<div class="k">'+esc(human(k))+'</div><div class="'+(sensitive?'sensitive':'')+'">'+esc(shown??'')+'</div>';
+    }
+  }
+  html+='</div>';
+  document.getElementById('detailBody').innerHTML=html;
+}
+
+document.getElementById('revealSensitive').onclick=()=>{
+  sensitiveVisible=!sensitiveVisible;
+  document.getElementById('revealSensitive').textContent=sensitiveVisible?'Hide Sensitive Fields':'Reveal Sensitive Fields';
+  renderDetail();
+};
+
+async function openVideo(id){
+  try{
+    const {url}=await api('video_link',{id});
+    window.open(url,'_blank','noopener');
+  }catch(e){alert('Could not open video: '+e.message)}
+}
+
+function loadAll(){loadApplications();loadRooms();loadVideos()}
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id==='view-'+b.dataset.tab));
+});
+document.querySelectorAll('.refresh').forEach(b=>b.onclick=()=>{
+  if(b.dataset.kind==='applications')loadApplications();
+  if(b.dataset.kind==='rooms')loadRooms();
+  if(b.dataset.kind==='videos')loadVideos();
+});
+
+getSession();
+</script>
+</body>
+</html>
