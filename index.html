@@ -22,48 +22,76 @@ footer{background:var(--pine);color:rgba(253,248,238,.78);padding:38px 0}footer 
 dialog{border:0;padding:0;background:transparent;width:min(680px,calc(100% - 28px));max-height:90vh}dialog::backdrop{background:rgba(8,20,12,.7)}.card{background:var(--cream);border-top:4px solid var(--gold);border-radius:8px;padding:26px;max-height:90vh;overflow:auto;position:relative}.x{position:absolute;right:12px;top:9px;border:0;background:none;font-size:28px;cursor:pointer}.card h2{font-size:27px;margin-bottom:6px}.note{color:#626b60;margin-top:0}.field{margin:13px 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-weight:800;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--brass);margin-bottom:5px}input,select,textarea{width:100%;padding:11px;border:1px solid #d9d2c2;border-radius:5px;font:15px Arial,sans-serif;background:#fff}.check{display:flex;gap:8px;align-items:flex-start;margin:16px 0}.check input{width:auto;margin-top:4px}.check label{text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600}.submit{width:100%;background:var(--moss);color:var(--cream)}.small{font-size:12px;color:#697166}.success{display:none;padding:10px 0}.success.show{display:block}.form.hide{display:none}
 @media(max-width:760px){.grid,.room{grid-template-columns:1fr}.room .side{min-width:0}.applybox{display:block}.applybox .btn{display:block;margin-top:20px;text-align:center}.row{grid-template-columns:1fr}.track span{font-size:30px}.top .wrap{align-items:flex-start;padding-top:15px;padding-bottom:15px;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.track{animation:none}}
-/* Aunt Nancy application */
-#applyDlg .card{
-  max-height:90vh;
-  overflow-y:auto;
+/* Aunt Nancy rental application - based on Hollis.Rental Application r22 pages 3-4 */
+#applyDlg{width:min(1000px,calc(100% - 28px));max-height:94vh}
+#applyDlg .card{max-height:94vh;overflow:auto}
+.application-header{text-align:center;border-bottom:2px solid var(--ink);padding:4px 0 12px;margin-bottom:12px}
+.application-header h1{font:800 clamp(24px,4vw,34px) Arial,sans-serif;letter-spacing:.06em;color:var(--ink)}
+.application-header h2{font:800 18px Arial,sans-serif;margin-top:7px;color:var(--ink)}
+.application-header p{margin:3px 0 0;font-weight:700}
+.application-page{background:#fff;border:1px solid #ded8c8;border-radius:7px;padding:22px;margin:16px 0}
+.app-section-title{font:800 14px Arial,sans-serif;text-transform:uppercase;border-bottom:3px solid var(--ink);padding-bottom:4px;margin:18px 0 8px}
+.app-section-title:first-child{margin-top:0}
+.app-grid-2,.app-grid-3,.app-grid-4,.app-grid-5,.app-grid-6{display:grid;gap:10px}
+.app-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.app-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.app-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.app-grid-5{grid-template-columns:2.2fr .7fr 1.2fr .6fr .8fr}
+.app-grid-6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.app-note{font-size:12px;line-height:1.4;color:#4f584f;margin:8px 0}
+.application-page .field{margin:7px 0}
+.application-page label{font-size:11px}
+.yesno{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.yesno > span{font-weight:700;font-size:13px}
+.yesno label,.inline-check label{display:inline-flex;align-items:center;gap:5px;text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600;font-size:13px;margin:0}
+.yesno input,.inline-check input{width:auto;margin:0}
+.inline-check{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:8px 0}
+.question-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-bottom:1px dotted #c8c2b4;padding:7px 0}
+.occupant-row,.credit-row{display:grid;gap:9px;align-items:end}
+.occupant-row{grid-template-columns:2.2fr .5fr 1.4fr}
+.credit-row{grid-template-columns:1.4fr 1.4fr 1.1fr .9fr .9fr}
+.legal-copy{font-size:11px;line-height:1.35;margin:12px 0;color:#252925}
+.sensitive-note{background:#fff8df;border:1px solid #ead9a4;padding:9px 11px;border-radius:5px;font-size:12px;margin:10px 0}
+.print-actions{display:flex;gap:12px;flex-wrap:wrap;position:sticky;bottom:0;background:var(--cream);padding:14px 0 4px;border-top:1px solid #ded8c8}
+.print-actions .btn{flex:1}
+.print-btn{background:#fff;border:1.5px solid var(--moss);color:var(--moss)}
+#applySuccess{margin-top:12px;background:#eef7ef;border:1px solid #bdd8c1;border-radius:6px;padding:14px}
+@media(max-width:820px){
+  .app-grid-3,.app-grid-4,.app-grid-5,.app-grid-6,.occupant-row,.credit-row{grid-template-columns:1fr}
+  .question-row{grid-template-columns:1fr}
+  .application-page{padding:16px}
 }
-
-#applyFormWrap{
-  width:100%;
-}
-
-#applyFormWrap .row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-#applyFormWrap .field{
-  margin-bottom:13px;
-}
-
-#applyFormWrap .check{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin:14px 0;
-}
-
-#applyFormWrap .check input{
-  width:auto;
-  margin-top:4px;
-}
-
-#applyFormWrap .check label{
-  margin:0;
-  text-transform:none;
-  letter-spacing:0;
-}
-
-@media (max-width:700px){
-  #applyFormWrap .row{
-    grid-template-columns:1fr;
-  }
+@media print{
+  @page{size:Letter;margin:.32in}
+  body{background:#fff;color:#000;font:9pt/1.2 Arial,sans-serif}
+  body>header,body>section,body>.ticker,body>footer,body>dialog:not(#applyDlg){display:none!important}
+  #applyDlg{display:block!important;position:static!important;width:100%!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;background:#fff!important;color:#000!important}
+  #applyDlg::backdrop{display:none!important}
+  #applyDlg .card{max-height:none!important;overflow:visible!important;border:0!important;border-radius:0!important;padding:0!important;background:#fff!important;box-shadow:none!important}
+  #applyDlg .x,.print-actions,.screen-only,#applySuccess{display:none!important}
+  .application-page{border:0!important;border-radius:0!important;padding:0!important;margin:0!important;background:#fff!important;break-after:page;page-break-after:always}
+  .application-page:last-of-type{break-after:auto;page-break-after:auto}
+  .application-header{padding:0 0 5px;margin-bottom:5px;border-bottom:2px solid #000}
+  .application-header h1{font-size:17pt!important;color:#000!important}
+  .application-header h2{font-size:11pt!important;margin-top:3px}
+  .application-header p{font-size:8pt;margin-top:2px}
+  .app-section-title{font-size:8.5pt!important;margin:6px 0 3px!important;padding-bottom:2px!important;border-bottom:2px solid #000}
+  .app-grid-2,.app-grid-3,.app-grid-4,.app-grid-5,.app-grid-6{gap:4px!important}
+  .app-grid-2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .app-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .app-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  .app-grid-5{grid-template-columns:2.2fr .7fr 1.2fr .6fr .8fr!important}
+  .app-grid-6{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+  .occupant-row{grid-template-columns:2.2fr .5fr 1.4fr!important}
+  .credit-row{grid-template-columns:1.4fr 1.4fr 1.1fr .9fr .9fr!important}
+  .application-page .field{margin:2px 0!important}
+  .application-page label{font-size:6.8pt!important;color:#000!important;margin-bottom:1px!important}
+  .application-page input,.application-page select,.application-page textarea{font-size:8pt!important;color:#000!important;padding:1px 1px!important;border:0!important;border-bottom:1px solid #000!important;border-radius:0!important;background:transparent!important;min-height:14px!important;line-height:1.1!important}
+  .application-page textarea{border:1px solid #000!important;min-height:32px!important}
+  .yesno,.inline-check{gap:5px!important;margin:2px 0!important}
+  .yesno label,.inline-check label,.yesno>span{font-size:7pt!important}
+  .question-row{padding:2px 0!important;gap:4px!important}
+  .app-note,.legal-copy,.sensitive-note{font-size:6.5pt!important;line-height:1.2!important;margin:3px 0!important;padding:0!important;background:none!important;border:0!important;color:#000!important}
 }
 </style>
 </head>
@@ -127,153 +155,222 @@ dialog{border:0;padding:0;background:transparent;width:min(680px,calc(100% - 28p
 </div></section>
 
 <dialog id="applyDlg"><div class="card">
-<button class="x" data-close="applyDlg" aria-label="Close">×</button>
+<button class="x no-print" data-close="applyDlg" aria-label="Close">×</button>
 <div class="form" id="applyFormWrap">
+<form id="appform" autocomplete="off">
+<input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(28,56,44,.14)">
-    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false" style="width:52px;height:52px;color:var(--gold);flex:none">
-      <use href="#anansi"></use>
-    </svg>
-    <div>
-      <div style="font-family:'Newsreader',Georgia,serif;font-size:22px;font-weight:600;color:var(--moss)">Aunt Nancy</div>
-      <div style="font-size:13px;color:#5a6259">Residence Application</div>
-    </div>
+<div class="application-page" id="applicationPage1">
+  <div class="application-header">
+    <h1>AUNT NANCY RESIDENCE</h1>
+    <h2>APPLICATION TO RENT</h2>
+    <p>Complete separate application for each adult tenant.</p>
   </div>
 
-  <h2>Residence Application</h2>
-  <p class="note">Complete the information below. Your application will be submitted securely to Aunt Nancy Residence.</p>
+  <p class="sensitive-note screen-only"><strong>Privacy:</strong> This application includes sensitive identification and financial information. Use a private device and connection when possible.</p>
 
-  <form id="appform">
+  <div class="app-grid-4">
+    <div class="field"><label>Last Name</label><input name="last_name" required></div>
+    <div class="field"><label>First Name</label><input name="first_name" required></div>
+    <div class="field"><label>Middle Name</label><input name="middle_name"></div>
+    <div class="field"><label>Social Security #</label><input name="social_security_number" autocomplete="off" placeholder="XXX-XX-XXXX"></div>
+  </div>
 
-    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
-           style="position:absolute;left:-9999px">
+  <div class="app-grid-3">
+    <div class="field"><label>Driver's Lic./ID #</label><input name="drivers_license_id" autocomplete="off"></div>
+    <div class="field"><label>State</label><input name="drivers_license_state"></div>
+    <div class="field"><label>Birthdate</label><input name="birthdate" type="date" required></div>
+  </div>
 
-    <div class="row">
-      <div class="field">
-        <label>Full legal name</label>
-        <input name="name" required>
-      </div>
+  <div class="app-grid-4">
+    <div class="field"><label>Home Phone</label><input name="home_phone" type="tel"></div>
+    <div class="field"><label>Work Phone</label><input name="work_phone" type="tel"></div>
+    <div class="field"><label>Cell Phone</label><input name="cell_phone" type="tel" required></div>
+    <div class="field"><label>Email</label><input name="email" type="email" required></div>
+  </div>
 
-      <div class="field">
-        <label>Date of birth</label>
-        <input name="date_of_birth" type="date" required>
-      </div>
-    </div>
+  <div class="app-section-title">Current Address</div>
+  <div class="app-grid-5">
+    <div class="field"><label>Street</label><input name="current_street"></div>
+    <div class="field"><label>Unit #</label><input name="current_unit"></div>
+    <div class="field"><label>City</label><input name="current_city"></div>
+    <div class="field"><label>State</label><input name="current_state"></div>
+    <div class="field"><label>ZIP</label><input name="current_zip"></div>
+  </div>
+  <div class="app-grid-4">
+    <div class="field"><label>From (Month/Year)</label><input name="current_from"></div>
+    <div class="field"><label>To</label><input name="current_to"></div>
+    <div class="field"><label>Last Rent Paid - Month</label><input name="current_last_rent_month"></div>
+    <div class="field"><label>Amount $</label><input name="current_last_rent_amount"></div>
+  </div>
+  <div class="app-grid-3">
+    <div class="field"><label>Owner/Manager</label><input name="current_owner_manager"></div>
+    <div class="field"><label>Tel.</label><input name="current_owner_tel" type="tel"></div>
+    <div class="field"><label>Reason for Leaving</label><input name="current_reason_leaving"></div>
+  </div>
 
-    <div class="row">
-      <div class="field">
-        <label>Phone</label>
-        <input name="phone" type="tel" required>
-      </div>
+  <div class="app-section-title">Previous Address</div>
+  <div class="app-grid-5">
+    <div class="field"><label>Street</label><input name="previous1_street"></div>
+    <div class="field"><label>Unit #</label><input name="previous1_unit"></div>
+    <div class="field"><label>City</label><input name="previous1_city"></div>
+    <div class="field"><label>State</label><input name="previous1_state"></div>
+    <div class="field"><label>ZIP</label><input name="previous1_zip"></div>
+  </div>
+  <div class="app-grid-4">
+    <div class="field"><label>From (Month/Year)</label><input name="previous1_from"></div>
+    <div class="field"><label>To</label><input name="previous1_to"></div>
+    <div class="field"><label>Last Rent Paid - Month</label><input name="previous1_last_rent_month"></div>
+    <div class="field"><label>Amount $</label><input name="previous1_last_rent_amount"></div>
+  </div>
+  <div class="app-grid-3">
+    <div class="field"><label>Owner/Manager</label><input name="previous1_owner_manager"></div>
+    <div class="field"><label>Tel.</label><input name="previous1_owner_tel" type="tel"></div>
+    <div class="field"><label>Reason for Leaving</label><input name="previous1_reason_leaving"></div>
+  </div>
 
-      <div class="field">
-        <label>Email</label>
-        <input name="email" type="email" required>
-      </div>
-    </div>
+  <div class="app-section-title">Second Previous Address</div>
+  <div class="app-grid-5">
+    <div class="field"><label>Street</label><input name="previous2_street"></div>
+    <div class="field"><label>Unit #</label><input name="previous2_unit"></div>
+    <div class="field"><label>City</label><input name="previous2_city"></div>
+    <div class="field"><label>State</label><input name="previous2_state"></div>
+    <div class="field"><label>ZIP</label><input name="previous2_zip"></div>
+  </div>
+  <div class="app-grid-4">
+    <div class="field"><label>From (Month/Year)</label><input name="previous2_from"></div>
+    <div class="field"><label>To</label><input name="previous2_to"></div>
+    <div class="field"><label>Last Rent Paid - Month</label><input name="previous2_last_rent_month"></div>
+    <div class="field"><label>Amount $</label><input name="previous2_last_rent_amount"></div>
+  </div>
+  <div class="app-grid-3">
+    <div class="field"><label>Owner/Manager</label><input name="previous2_owner_manager"></div>
+    <div class="field"><label>Tel.</label><input name="previous2_owner_tel" type="tel"></div>
+    <div class="field"><label>Reason for Leaving</label><input name="previous2_reason_leaving"></div>
+  </div>
 
-    <div class="field">
-      <label>Current address</label>
-      <input name="address">
-    </div>
+  <div class="app-section-title">Current Employment</div>
+  <div class="app-grid-2">
+    <div class="field"><label>Company Name</label><input name="current_employer_name"></div>
+    <div class="field"><label>Address</label><input name="current_employer_address"></div>
+  </div>
+  <div class="app-grid-3">
+    <div class="field"><label>Company Phone</label><input name="current_employer_phone" type="tel"></div>
+    <div class="field"><label>Occupation/Position</label><input name="current_occupation"></div>
+    <div class="field"><label>Type of Business</label><input name="current_business_type"></div>
+  </div>
+  <div class="app-grid-4">
+    <div class="field"><label>Name of Supervisor</label><input name="current_supervisor"></div>
+    <div class="field"><label>Employment From</label><input name="current_employment_from"></div>
+    <div class="field"><label>To</label><input name="current_employment_to"></div>
+    <div class="field"><label>Monthly Salary</label><input name="current_monthly_salary"></div>
+  </div>
 
-    <div class="row">
-      <div class="field">
-        <label>Requested move-in date</label>
-        <input name="movein" type="date">
-      </div>
+  <div class="app-section-title">Previous Employment</div>
+  <div class="app-grid-2">
+    <div class="field"><label>Company Name</label><input name="previous_employer_name"></div>
+    <div class="field"><label>Address</label><input name="previous_employer_address"></div>
+  </div>
+  <div class="app-grid-3">
+    <div class="field"><label>Phone</label><input name="previous_employer_phone" type="tel"></div>
+    <div class="field"><label>Occupation/Position</label><input name="previous_occupation"></div>
+    <div class="field"><label>Type of Business</label><input name="previous_business_type"></div>
+  </div>
+  <div class="app-grid-4">
+    <div class="field"><label>Name of Supervisor</label><input name="previous_supervisor"></div>
+    <div class="field"><label>Employment From</label><input name="previous_employment_from"></div>
+    <div class="field"><label>To</label><input name="previous_employment_to"></div>
+    <div class="field"><label>Monthly Salary</label><input name="previous_monthly_salary"></div>
+  </div>
 
-      <div class="field">
-        <label>Referred by</label>
-        <input name="referred_by">
-      </div>
-    </div>
+  <div class="field"><label>When do you plan to move in? Date</label><input name="move_in_date" type="date"></div>
 
-    <div class="field">
-      <label>Current housing situation</label>
-      <select name="housing">
-        <option value="">Choose one</option>
-        <option>Living with family/friends</option>
-        <option>Treatment or transitional program</option>
-        <option>Another recovery residence</option>
-        <option>Temporary housing</option>
-        <option>Currently unhoused</option>
-        <option>Other</option>
-      </select>
-    </div>
+  <p class="legal-copy">Applicant represents that the statements made are true and correct and authorizes Owner's verification of credit, income and references; and APPLICANT UNDERSTANDS AND AGREES THAT ANY MISREPRESENTATION AND/OR OMISSION IS GROUNDS FOR EVICTION. Applicant agrees to pay for said credit verification. Such payment is a part of the application process and is a charge for the administrative costs of application consideration. If Applicant pays by a personal check which is returned "NSF", applicant shall be liable for the charge on demand. The undersigned makes application to rent housing accommodations designated as:</p>
 
-    <div class="row">
-      <div class="field">
-        <label>Work / school status</label>
-        <select name="status">
-          <option value="">Choose one</option>
-          <option>Working</option>
-          <option>In school/training</option>
-          <option>Looking for work</option>
-          <option>Receiving benefits/income support</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Approx. monthly income</label>
-        <input name="monthly_income" placeholder="$">
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Employer / income source</label>
-      <input name="income_source">
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label>Emergency contact</label>
-        <input name="emergency_name">
-      </div>
-
-      <div class="field">
-        <label>Emergency phone</label>
-        <input name="emergency_phone" type="tel">
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Relationship to emergency contact</label>
-      <input name="emergency_relationship">
-    </div>
-
-    <div class="field">
-      <label>Anything else we should know?</label>
-      <textarea name="notes" rows="4"></textarea>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label>Type your full name as your signature</label>
-        <input name="signature" required>
-      </div>
-
-      <div class="field">
-        <label>Date</label>
-        <input name="signature_date" type="date" required>
-      </div>
-    </div>
-
-    <div class="check">
-      <input id="cert" type="checkbox" required>
-      <label for="cert">I certify that the information provided is true and complete to the best of my knowledge.</label>
-    </div>
-
-    <button class="btn submit" id="appSubmit" type="submit">Submit Application</button>
-
-    <p class="small" id="appError" style="display:none;color:#8a2020"></p>
-
-    <p class="small">Questions? Call 310.957.4414.</p>
-
-  </form>
+  <div class="app-grid-2">
+    <div class="field"><label>Apartment No.</label><input name="apartment_number"></div>
+    <div class="field"><label>At</label><input name="rental_address"></div>
+  </div>
+  <div class="app-grid-3">
+    <div class="field"><label>Rent per month $</label><input name="monthly_rent"></div>
+    <div class="field"><label>First month's rent $</label><input name="first_month_rent"></div>
+    <div class="field"><label>Security deposit $</label><input name="security_deposit"></div>
+  </div>
+  <div class="app-grid-2">
+    <div class="field"><label>Applicant Signature - Type Full Name</label><input name="signature" required></div>
+    <div class="field"><label>Date</label><input name="signature_date" type="date" required></div>
+  </div>
 </div>
-<div class="success" id="applySuccess"><h2>Application received.</h2><p>Thank you. Aunt Nancy Residence received your application and will use the contact information you provided to follow up.</p></div>
+
+<div class="application-page" id="applicationPage2">
+  <div class="yesno">
+    <span>Do you have a housing subsidy?</span>
+    <label><input type="radio" name="housing_subsidy" value="Yes"> Yes</label>
+    <label><input type="radio" name="housing_subsidy" value="No"> No</label>
+  </div>
+  <div class="inline-check">
+    <span>If yes, what?</span>
+    <label><input type="checkbox" name="subsidy_section8" value="Yes"> Section 8</label>
+    <label><input type="checkbox" name="subsidy_la_county_pilot" value="Yes"> L.A. County Pilot Program</label>
+    <label><input type="checkbox" name="subsidy_other" value="Yes"> Other rent payment program</label>
+    <input name="subsidy_other_name" placeholder="Other program" style="max-width:260px">
+  </div>
+
+  <div class="app-section-title">Additional Adults and Children Who Will Occupy Unit</div>
+  <p class="app-note">For purposes of credit & rent liability only. Please put "F" for full time or "P" for part time after each name.</p>
+  <div class="inline-check"><label><input type="checkbox" name="no_additional_occupants" value="Yes"> If this box is checked there shall be no additional occupant(s).</label></div>
+  <div class="occupant-row"><div class="field"><label>Name</label><input name="occupant1_name"></div><div class="field"><label>Age</label><input name="occupant1_age"></div><div class="field"><label>Relationship</label><input name="occupant1_relationship"></div></div>
+  <div class="occupant-row"><div class="field"><label>Name</label><input name="occupant2_name"></div><div class="field"><label>Age</label><input name="occupant2_age"></div><div class="field"><label>Relationship</label><input name="occupant2_relationship"></div></div>
+  <div class="occupant-row"><div class="field"><label>Name</label><input name="occupant3_name"></div><div class="field"><label>Age</label><input name="occupant3_age"></div><div class="field"><label>Relationship</label><input name="occupant3_relationship"></div></div>
+  <div class="occupant-row"><div class="field"><label>Name</label><input name="occupant4_name"></div><div class="field"><label>Age</label><input name="occupant4_age"></div><div class="field"><label>Relationship</label><input name="occupant4_relationship"></div></div>
+
+  <div class="app-section-title">Additional Information</div>
+  <div class="question-row"><span>1. Have you ever had any credit problems?</span><div class="yesno"><label><input type="radio" name="credit_problems" value="Yes"> Yes</label><label><input type="radio" name="credit_problems" value="No"> No</label></div></div>
+  <div class="question-row"><span>2. Have you ever had an unlawful detainer filed against you?</span><div class="yesno"><label><input type="radio" name="unlawful_detainer" value="Yes"> Yes</label><label><input type="radio" name="unlawful_detainer" value="No"> No</label></div></div>
+  <div class="question-row"><span>3. Have you ever been evicted for non-payment of rent or for any other reason?</span><div class="yesno"><label><input type="radio" name="evicted" value="Yes"> Yes</label><label><input type="radio" name="evicted" value="No"> No</label></div></div>
+  <div class="question-row"><span>4. Have you ever filed bankruptcy?</span><div class="yesno"><label><input type="radio" name="bankruptcy" value="Yes"> Yes</label><label><input type="radio" name="bankruptcy" value="No"> No</label></div></div>
+  <div class="question-row"><span>5. Have you ever been convicted of a felony?</span><div class="yesno"><label><input type="radio" name="felony" value="Yes"> Yes</label><label><input type="radio" name="felony" value="No"> No</label></div></div>
+  <div class="question-row"><span>6. Do you have any animals?</span><div class="yesno"><label><input type="radio" name="animals" value="Yes"> Yes</label><label><input type="radio" name="animals" value="No"> No</label></div></div>
+  <div class="app-grid-2"><div class="field"><label>If Yes, How many?</label><input name="animal_count"></div><div class="field"><label>Describe</label><input name="animal_description"></div></div>
+  <div class="question-row"><span>7. Will you be using any water-filled furniture in your residence?</span><div class="yesno"><label><input type="radio" name="water_filled_furniture" value="Yes"> Yes</label><label><input type="radio" name="water_filled_furniture" value="No"> No</label></div></div>
+  <div class="question-row"><span>If Yes, do you have insurance coverage?</span><div class="yesno"><label><input type="radio" name="water_filled_insurance" value="Yes"> Yes</label><label><input type="radio" name="water_filled_insurance" value="No"> No</label></div></div>
+  <div class="question-row"><span>8. Do you have any musical instruments?</span><div class="yesno"><label><input type="radio" name="musical_instruments" value="Yes"> Yes</label><label><input type="radio" name="musical_instruments" value="No"> No</label></div></div>
+  <div class="field"><label>If Yes, what kind?</label><input name="instrument_kind"></div>
+  <div class="question-row"><span>9. Do you smoke?</span><div class="yesno"><label><input type="radio" name="applicant_smokes" value="Yes"> Yes</label><label><input type="radio" name="applicant_smokes" value="No"> No</label></div></div>
+  <div class="question-row"><span>Does any other proposed occupant smoke?</span><div class="yesno"><label><input type="radio" name="other_occupant_smokes" value="Yes"> Yes</label><label><input type="radio" name="other_occupant_smokes" value="No"> No</label></div></div>
+  <div class="field"><label>10. Please explain any "YES" answers.</label><textarea name="yes_explanations" rows="3"></textarea></div>
+
+  <div class="app-section-title">Banking Information</div>
+  <div class="app-grid-2"><div class="field"><label>Name of Bank/S&L/Credit Union</label><input name="bank1_name"></div><div class="field"><label>Branch or Address</label><input name="bank1_branch"></div></div>
+  <div class="app-grid-4"><div class="field"><label>Checking #</label><input name="bank1_checking" autocomplete="off"></div><div class="field"><label>Approx. Bal.</label><input name="bank1_checking_balance"></div><div class="field"><label>Savings #</label><input name="bank1_savings" autocomplete="off"></div><div class="field"><label>Approx. Bal.</label><input name="bank1_savings_balance"></div></div>
+  <div class="app-grid-2"><div class="field"><label>Name of Bank/S&L/Credit Union</label><input name="bank2_name"></div><div class="field"><label>Branch or Address</label><input name="bank2_branch"></div></div>
+  <div class="app-grid-4"><div class="field"><label>Checking #</label><input name="bank2_checking" autocomplete="off"></div><div class="field"><label>Approx. Bal.</label><input name="bank2_checking_balance"></div><div class="field"><label>Savings #</label><input name="bank2_savings" autocomplete="off"></div><div class="field"><label>Approx. Bal.</label><input name="bank2_savings_balance"></div></div>
+  <div class="field"><label>Other sources of income</label><input name="other_income_sources"></div>
+
+  <div class="app-section-title">Credit References (Credit Cards/Car Payments/Other Loans)</div>
+  <div class="credit-row"><div class="field"><label>Company Name</label><input name="credit1_company"></div><div class="field"><label>Address/City</label><input name="credit1_address"></div><div class="field"><label>Account #</label><input name="credit1_account" autocomplete="off"></div><div class="field"><label>Present Balance</label><input name="credit1_balance"></div><div class="field"><label>Monthly Payment</label><input name="credit1_payment"></div></div>
+  <div class="credit-row"><div class="field"><label>Company Name</label><input name="credit2_company"></div><div class="field"><label>Address/City</label><input name="credit2_address"></div><div class="field"><label>Account #</label><input name="credit2_account" autocomplete="off"></div><div class="field"><label>Present Balance</label><input name="credit2_balance"></div><div class="field"><label>Monthly Payment</label><input name="credit2_payment"></div></div>
+  <div class="credit-row"><div class="field"><label>Company Name</label><input name="credit3_company"></div><div class="field"><label>Address/City</label><input name="credit3_address"></div><div class="field"><label>Account #</label><input name="credit3_account" autocomplete="off"></div><div class="field"><label>Present Balance</label><input name="credit3_balance"></div><div class="field"><label>Monthly Payment</label><input name="credit3_payment"></div></div>
+  <div class="credit-row"><div class="field"><label>Company Name</label><input name="credit4_company"></div><div class="field"><label>Address/City</label><input name="credit4_address"></div><div class="field"><label>Account #</label><input name="credit4_account" autocomplete="off"></div><div class="field"><label>Present Balance</label><input name="credit4_balance"></div><div class="field"><label>Monthly Payment</label><input name="credit4_payment"></div></div>
+
+  <div class="app-section-title">Emergency Contact</div>
+  <div class="app-grid-4"><div class="field"><label>Name</label><input name="emergency_name"></div><div class="field"><label>Address</label><input name="emergency_address"></div><div class="field"><label>Relationship</label><input name="emergency_relationship"></div><div class="field"><label>Phone</label><input name="emergency_phone" type="tel"></div></div>
+
+  <div class="app-section-title">Vehicles (Operable Automobiles including Trucks, Vans, Motorcycles)</div>
+  <div class="question-row"><span>Are you the registered owner?</span><div class="yesno"><label><input type="radio" name="registered_owner" value="Yes"> Yes</label><label><input type="radio" name="registered_owner" value="No"> No</label></div></div>
+  <div class="field"><label>If not who?</label><input name="vehicle_owner_if_not"></div>
+  <div class="app-grid-6"><div class="field"><label>Year</label><input name="vehicle_year"></div><div class="field"><label>Make</label><input name="vehicle_make"></div><div class="field"><label>Model</label><input name="vehicle_model"></div><div class="field"><label>Color</label><input name="vehicle_color"></div><div class="field"><label>License #</label><input name="vehicle_license"></div><div class="field"><label>State</label><input name="vehicle_state"></div></div>
+</div>
+
+<div class="print-actions no-print">
+  <button class="btn print-btn" id="printApplication" type="button">Print / Save Hard Copy</button>
+  <button class="btn submit" id="appSubmit" type="submit">Submit Application</button>
+</div>
+<p class="small screen-only" id="appError" style="display:none;color:#8a2020"></p>
+<p class="small screen-only">Questions? Call 310.957.4414.</p>
+</form>
+</div>
+<div class="success" id="applySuccess"><h2>Application received.</h2><p>Your application was submitted to Aunt Nancy Residence. You may still use <strong>Print / Save Hard Copy</strong> above to keep a completed copy.</p></div>
 </div></dialog>
 
 <dialog id="roomDlg"><div class="card">
@@ -302,34 +399,73 @@ document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>document.getE
 document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d)d.close()}));
 const APP_ENDPOINT='https://hkrrxscyhtxmbvxevfkw.supabase.co/functions/v1/aunt-nancy-submit-application';
 
-document.getElementById('appForm').addEventListener('submit',async e=>{
+document.getElementById('printApplication').addEventListener('click',()=>window.print());
+
+document.getElementById('appform').addEventListener('submit',async e=>{
   e.preventDefault();
   const form=e.currentTarget;
   const submit=document.getElementById('appSubmit');
   const error=document.getElementById('appError');
   error.style.display='none';
   error.textContent='';
-  submit.disabled=true;
-  submit.textContent='Submitting...';
 
   const fd=new FormData(form);
+  const honeypot=(fd.get('website')||'').toString();
+  const first=(fd.get('first_name')||'').toString().trim();
+  const middle=(fd.get('middle_name')||'').toString().trim();
+  const last=(fd.get('last_name')||'').toString().trim();
+  const fullName=[last,first,middle].filter(Boolean).join(last&&first?', ':' ').trim();
+  const phone=((fd.get('cell_phone')||fd.get('home_phone')||fd.get('work_phone')||'')).toString().trim();
+  const email=(fd.get('email')||'').toString().trim();
+  const dob=(fd.get('birthdate')||'').toString().trim();
+  const signature=(fd.get('signature')||'').toString().trim();
+  const signatureDate=(fd.get('signature_date')||'').toString().trim();
+
+  if(!fullName||!phone||!email||!dob||!signature||!signatureDate){
+    error.textContent='Please complete your name, birthdate, phone, email, signature, and signature date before submitting.';
+    error.style.display='block';
+    return;
+  }
+
+  const formDataObj={};
+  for(const [key,value] of fd.entries()){
+    if(key==='website'||value instanceof File) continue;
+    formDataObj[key]=typeof value==='string'?value:'';
+  }
+
+  const currentAddress=[
+    fd.get('current_street'),
+    fd.get('current_unit')?('Unit '+fd.get('current_unit')):'',
+    fd.get('current_city'),
+    fd.get('current_state'),
+    fd.get('current_zip')
+  ].filter(Boolean).join(', ');
+
   const payload={
-    website: fd.get('website')||'',
-    full_name: fd.get('name')||'',
-    date_of_birth: fd.get('dob')||'',
-    phone: fd.get('phone')||'',
-    email: fd.get('email')||'',
-    current_address: fd.get('address')||'',
-    requested_move_in_date: fd.get('movein')||'',
-    referred_by: fd.get('referral')||'',
-    current_housing_situation: fd.get('housing')||'',
-    work_school_status: fd.get('status')||'',
-    emergency_contact_name: fd.get('emergency_name')||'',
-    emergency_contact_phone: fd.get('emergency_phone')||'',
-    notes: fd.get('notes')||'',
-    signature_name: fd.get('signature')||'',
-    certified: document.getElementById('cert').checked
+    website:honeypot,
+    full_name:fullName,
+    date_of_birth:dob,
+    phone,
+    email,
+    current_address:currentAddress,
+    requested_move_in_date:(fd.get('move_in_date')||'').toString(),
+    referred_by:'',
+    current_housing_situation:(fd.get('current_reason_leaving')||'').toString(),
+    work_school_status:[
+      fd.get('current_employer_name'),
+      fd.get('current_occupation')
+    ].filter(Boolean).join(' - '),
+    emergency_contact_name:(fd.get('emergency_name')||'').toString(),
+    emergency_contact_phone:(fd.get('emergency_phone')||'').toString(),
+    notes:(fd.get('yes_explanations')||'').toString(),
+    signature_name:signature,
+    signature_date:signatureDate,
+    certified:true,
+    form_data:formDataObj
   };
+
+  submit.disabled=true;
+  submit.textContent='Submitting...';
 
   try{
     const res=await fetch(APP_ENDPOINT,{
@@ -339,9 +475,8 @@ document.getElementById('appForm').addEventListener('submit',async e=>{
     });
     const data=await res.json().catch(()=>({}));
     if(!res.ok||!data.ok) throw new Error(data.error||'submission_failed');
-    document.getElementById('applyFormWrap').classList.add('hide');
     document.getElementById('applySuccess').classList.add('show');
-    form.reset();
+    submit.textContent='Submitted';
   }catch(err){
     error.textContent='Your application did not submit. Please try again or call 310.957.4414.';
     error.style.display='block';
