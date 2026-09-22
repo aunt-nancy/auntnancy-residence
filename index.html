@@ -375,9 +375,32 @@ dialog{border:0;padding:0;background:transparent;width:min(680px,calc(100% - 28p
 
 <dialog id="roomDlg"><div class="card">
 <button class="x" data-close="roomDlg" aria-label="Close">×</button>
-<div class="form" id="roomFormWrap"><h2>Ask About a Room</h2><p class="note">Tell us how to reach you.</p>
-<form id="roomForm"><div class="field"><label>Name</label><input required></div><div class="row"><div class="field"><label>Phone</label><input type="tel" required></div><div class="field"><label>Email</label><input type="email"></div></div><div class="field"><label>Shared or private?</label><select><option>Either</option><option>Shared room</option><option>Private room</option></select></div><button class="btn submit" type="submit">Continue</button></form></div>
-<div class="success" id="roomSuccess"><h2>Thanks.</h2><p>Please call 310.957.4414 for current room information.</p></div>
+<div class="form" id="roomFormWrap">
+  <h2>Ask About a Room</h2>
+  <p class="note">Tell us how to reach you and what type of room you prefer.</p>
+  <form id="roomForm" autocomplete="off">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <div class="field"><label>Name</label><input name="name" required></div>
+    <div class="row">
+      <div class="field"><label>Phone</label><input name="phone" type="tel" required></div>
+      <div class="field"><label>Email <span style="text-transform:none;font-weight:400">(optional)</span></label><input name="email" type="email"></div>
+    </div>
+    <div class="field">
+      <label>Shared or private?</label>
+      <select name="room_preference">
+        <option>Either</option>
+        <option>Shared room</option>
+        <option>Private room</option>
+      </select>
+    </div>
+    <button class="btn submit" id="roomSubmit" type="submit">Send Room Inquiry</button>
+    <p class="small" id="roomError" style="display:none;color:#8a2020"></p>
+  </form>
+</div>
+<div class="success" id="roomSuccess">
+  <h2>Inquiry received.</h2>
+  <p>Thank you. Aunt Nancy Residence received your room inquiry and can follow up using the contact information you provided.</p>
+</div>
 </div></dialog>
 
 <dialog id="videoDlg"><div class="card">
@@ -510,6 +533,58 @@ document.getElementById('appform').addEventListener('submit',async e=>{
 });
 
 
+
+const ROOM_ENDPOINT='https://hkrrxscyhtxmbvxevfkw.supabase.co/functions/v1/aunt-nancy-room-inquiry';
+
+document.getElementById('roomForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  const form=e.currentTarget;
+  const fd=new FormData(form);
+  const submit=document.getElementById('roomSubmit');
+  const error=document.getElementById('roomError');
+
+  error.style.display='none';
+  error.textContent='';
+
+  const payload={
+    website:(fd.get('website')||'').toString(),
+    name:(fd.get('name')||'').toString().trim(),
+    phone:(fd.get('phone')||'').toString().trim(),
+    email:(fd.get('email')||'').toString().trim(),
+    room_preference:(fd.get('room_preference')||'Either').toString()
+  };
+
+  if(!payload.name||!payload.phone){
+    error.textContent='Please enter your name and phone number.';
+    error.style.display='block';
+    return;
+  }
+
+  submit.disabled=true;
+  submit.textContent='Sending...';
+
+  try{
+    const res=await fetch(ROOM_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+    const data=await res.json().catch(()=>({}));
+    if(!res.ok||!data.ok) throw new Error(data.error||'submission_failed');
+
+    document.getElementById('roomFormWrap').classList.add('hide');
+    document.getElementById('roomSuccess').classList.add('show');
+    form.reset();
+  }catch(err){
+    console.error(err);
+    error.textContent='Your inquiry did not send. Please try again or call 310.957.4414.';
+    error.style.display='block';
+    submit.disabled=false;
+    submit.textContent='Send Room Inquiry';
+  }
+});
+
 const VIDEO_ENDPOINT='https://hkrrxscyhtxmbvxevfkw.supabase.co/functions/v1/aunt-nancy-video-upload';
 
 document.getElementById('videoForm').addEventListener('submit',async e=>{
@@ -619,6 +694,5 @@ document.getElementById('videoForm').addEventListener('submit',async e=>{
 });
 
 function localComplete(formId,wrapId,successId){document.getElementById(formId).addEventListener('submit',e=>{e.preventDefault();document.getElementById(wrapId).classList.add('hide');document.getElementById(successId).classList.add('show')})}
-localComplete('roomForm','roomFormWrap','roomSuccess');
 </script>
 </body></html>
