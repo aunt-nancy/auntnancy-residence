@@ -382,9 +382,33 @@ dialog{border:0;padding:0;background:transparent;width:min(680px,calc(100% - 28p
 
 <dialog id="videoDlg"><div class="card">
 <button class="x" data-close="videoDlg" aria-label="Close">×</button>
-<div class="form" id="videoFormWrap"><h2>Upload a Short Video</h2><p class="note">Choose a video from your phone or computer. Video storage is being connected before public launch.</p>
-<form id="videoForm"><div class="field"><label>Name</label><input required></div><div class="field"><label>Phone</label><input type="tel" required></div><div class="field"><label>Video</label><input type="file" accept="video/mp4,video/quicktime,video/webm" required></div><div class="check"><input id="vc" type="checkbox" required><label for="vc">I am voluntarily submitting this video for Aunt Nancy to review.</label></div><button class="btn submit" type="submit">Continue</button></form></div>
-<div class="success" id="videoSuccess"><h2>Video selected.</h2><p>Upload storage is being connected. Please call 310.957.4414 if you need to send it today.</p></div>
+<div class="form" id="videoFormWrap">
+  <h2>Upload a Short Video</h2>
+  <p class="note">Choose a video from your phone or computer. Videos are stored privately in Aunt Nancy's Supabase storage.</p>
+  <form id="videoForm" autocomplete="off">
+    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+    <div class="field"><label>Name</label><input id="videoName" name="name" required></div>
+    <div class="row">
+      <div class="field"><label>Phone</label><input id="videoPhone" name="phone" type="tel" required></div>
+      <div class="field"><label>Email <span style="text-transform:none;font-weight:400">(optional)</span></label><input id="videoEmail" name="email" type="email"></div>
+    </div>
+    <div class="field">
+      <label>Video</label>
+      <input id="videoFile" name="video" type="file" accept="video/mp4,video/quicktime,video/webm" required>
+      <p class="small">MP4, MOV, or WebM. Maximum file size: 100 MB. Keep this page open while the video uploads.</p>
+    </div>
+    <div class="check">
+      <input id="vc" type="checkbox" required>
+      <label for="vc">I am voluntarily submitting this video for Aunt Nancy to review.</label>
+    </div>
+    <button class="btn submit" id="videoSubmit" type="submit">Upload Video</button>
+    <p class="small" id="videoError" style="display:none;color:#8a2020"></p>
+  </form>
+</div>
+<div class="success" id="videoSuccess">
+  <h2>Video uploaded.</h2>
+  <p>Thank you. Aunt Nancy Residence received your video and contact information.</p>
+</div>
 </div></dialog>
 
 <footer><div class="wrap"><p><strong>Aunt Nancy Residence</strong><br>South Los Angeles, California</p><p><a href="tel:+13109574414">310.957.4414</a></p><p style="font-size:12px">Housing information and optional programs are separate. No medical, detox, or clinical services are provided through this website.</p></div></footer>
@@ -485,8 +509,116 @@ document.getElementById('appform').addEventListener('submit',async e=>{
   }
 });
 
+
+const VIDEO_ENDPOINT='https://hkrrxscyhtxmbvxevfkw.supabase.co/functions/v1/aunt-nancy-video-upload';
+
+document.getElementById('videoForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  const form=e.currentTarget;
+  const fd=new FormData(form);
+  const file=document.getElementById('videoFile').files[0];
+  const submit=document.getElementById('videoSubmit');
+  const error=document.getElementById('videoError');
+  const name=(fd.get('name')||'').toString().trim();
+  const phone=(fd.get('phone')||'').toString().trim();
+  const email=(fd.get('email')||'').toString().trim();
+  const website=(fd.get('website')||'').toString();
+
+  error.style.display='none';
+  error.textContent='';
+
+  if(!file||!name||!phone){
+    error.textContent='Please enter your name and phone number and choose a video.';
+    error.style.display='block';
+    return;
+  }
+
+  const allowedTypes=['video/mp4','video/quicktime','video/webm'];
+  if(!allowedTypes.includes(file.type)){
+    error.textContent='Please choose an MP4, MOV, or WebM video.';
+    error.style.display='block';
+    return;
+  }
+
+  if(file.size>100*1024*1024){
+    error.textContent='The video is larger than 100 MB. Please choose a shorter or smaller video.';
+    error.style.display='block';
+    return;
+  }
+
+  submit.disabled=true;
+  submit.textContent='Preparing upload...';
+
+  try{
+    const prepRes=await fetch(VIDEO_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'prepare',
+        website,
+        name,
+        phone,
+        email,
+        original_filename:file.name,
+        mime_type:file.type,
+        file_size:file.size
+      })
+    });
+    const prep=await prepRes.json().catch(()=>({}));
+    if(!prepRes.ok||!prep.ok||!prep.signed_url||!prep.path){
+      throw new Error(prep.error||'upload_prepare_failed');
+    }
+
+    submit.textContent='Uploading video...';
+
+    const uploadBody=new FormData();
+    uploadBody.append('cacheControl','3600');
+    uploadBody.append('',file);
+
+    const uploadRes=await fetch(prep.signed_url,{
+      method:'PUT',
+      headers:{'x-upsert':'false'},
+      body:uploadBody
+    });
+    if(!uploadRes.ok){
+      throw new Error('video_upload_failed');
+    }
+
+    submit.textContent='Finishing...';
+
+    const completeRes=await fetch(VIDEO_ENDPOINT,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        action:'complete',
+        name,
+        phone,
+        email,
+        path:prep.path,
+        original_filename:file.name,
+        mime_type:file.type,
+        file_size:file.size
+      })
+    });
+    const complete=await completeRes.json().catch(()=>({}));
+    if(!completeRes.ok||!complete.ok){
+      throw new Error(complete.error||'submission_record_failed');
+    }
+
+    document.getElementById('videoFormWrap').classList.add('hide');
+    document.getElementById('videoSuccess').classList.add('show');
+    form.reset();
+  }catch(err){
+    console.error(err);
+    error.textContent='Your video did not upload. Please try again or call 310.957.4414.';
+    error.style.display='block';
+    submit.disabled=false;
+    submit.textContent='Upload Video';
+  }
+});
+
 function localComplete(formId,wrapId,successId){document.getElementById(formId).addEventListener('submit',e=>{e.preventDefault();document.getElementById(wrapId).classList.add('hide');document.getElementById(successId).classList.add('show')})}
 localComplete('roomForm','roomFormWrap','roomSuccess');
-localComplete('videoForm','videoFormWrap','videoSuccess');
 </script>
 </body></html>
