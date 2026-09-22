@@ -22,6 +22,49 @@ footer{background:var(--pine);color:rgba(253,248,238,.78);padding:38px 0}footer 
 dialog{border:0;padding:0;background:transparent;width:min(680px,calc(100% - 28px));max-height:90vh}dialog::backdrop{background:rgba(8,20,12,.7)}.card{background:var(--cream);border-top:4px solid var(--gold);border-radius:8px;padding:26px;max-height:90vh;overflow:auto;position:relative}.x{position:absolute;right:12px;top:9px;border:0;background:none;font-size:28px;cursor:pointer}.card h2{font-size:27px;margin-bottom:6px}.note{color:#626b60;margin-top:0}.field{margin:13px 0}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}label{display:block;font-weight:800;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--brass);margin-bottom:5px}input,select,textarea{width:100%;padding:11px;border:1px solid #d9d2c2;border-radius:5px;font:15px Arial,sans-serif;background:#fff}.check{display:flex;gap:8px;align-items:flex-start;margin:16px 0}.check input{width:auto;margin-top:4px}.check label{text-transform:none;letter-spacing:0;color:var(--ink);font-weight:600}.submit{width:100%;background:var(--moss);color:var(--cream)}.small{font-size:12px;color:#697166}.success{display:none;padding:10px 0}.success.show{display:block}.form.hide{display:none}
 @media(max-width:760px){.grid,.room{grid-template-columns:1fr}.room .side{min-width:0}.applybox{display:block}.applybox .btn{display:block;margin-top:20px;text-align:center}.row{grid-template-columns:1fr}.track span{font-size:30px}.top .wrap{align-items:flex-start;padding-top:15px;padding-bottom:15px;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.track{animation:none}}
+/* Aunt Nancy application */
+#applyDlg .card{
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+#applyFormWrap{
+  width:100%;
+}
+
+#applyFormWrap .row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+#applyFormWrap .field{
+  margin-bottom:13px;
+}
+
+#applyFormWrap .check{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:14px 0;
+}
+
+#applyFormWrap .check input{
+  width:auto;
+  margin-top:4px;
+}
+
+#applyFormWrap .check label{
+  margin:0;
+  text-transform:none;
+  letter-spacing:0;
+}
+
+@media (max-width:700px){
+  #applyFormWrap .row{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -86,22 +129,150 @@ dialog{border:0;padding:0;background:transparent;width:min(680px,calc(100% - 28p
 <dialog id="applyDlg"><div class="card">
 <button class="x" data-close="applyDlg" aria-label="Close">×</button>
 <div class="form" id="applyFormWrap">
-<h2>Residence Application</h2><p class="note">Complete the information below. Your application will be submitted securely to Aunt Nancy Residence.</p>
-<form id="appForm"><input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
-<div class="row"><div class="field"><label>Full legal name</label><input name="name" required></div><div class="field"><label>Date of birth</label><input name="dob" type="date" required></div></div>
-<div class="row"><div class="field"><label>Phone</label><input name="phone" type="tel" required></div><div class="field"><label>Email</label><input name="email" type="email" required></div></div>
-<div class="field"><label>Current address</label><input name="address"></div>
-<div class="row"><div class="field"><label>Requested move-in date</label><input name="movein" type="date"></div><div class="field"><label>Referred by</label><input name="referral"></div></div>
-<div class="field"><label>Current housing situation</label><select name="housing"><option value="">Choose one</option><option>Living with family/friends</option><option>Temporary housing</option><option>Another residence</option><option>Currently unhoused</option><option>Other</option></select></div>
-<div class="field"><label>Work / school status</label><select name="status"><option value="">Choose one</option><option>Working</option><option>In school or training</option><option>Looking for work</option><option>Receiving benefits or other income</option><option>Other</option></select></div>
-<div class="row"><div class="field"><label>Emergency contact</label><input name="emergency_name"></div><div class="field"><label>Emergency phone</label><input name="emergency_phone" type="tel"></div></div>
-<div class="field"><label>Anything else we should know?</label><textarea name="notes" rows="4"></textarea></div>
-<div class="field"><label>Type your full name as your signature</label><input name="signature" required></div>
-<div class="check"><input id="cert" type="checkbox" required><label for="cert">I certify that the information provided is true and complete to the best of my knowledge.</label></div>
-<button class="btn submit" id="appSubmit" type="submit">Submit Application</button>
-<p class="small" id="appError" style="display:none;color:#8a2020"></p>
-<p class="small">Questions? Call 310.957.4414.</p>
-</form></div>
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(28,56,44,.14)">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false" style="width:52px;height:52px;color:var(--gold);flex:none">
+      <use href="#anansi"></use>
+    </svg>
+    <div>
+      <div style="font-family:'Newsreader',Georgia,serif;font-size:22px;font-weight:600;color:var(--moss)">Aunt Nancy</div>
+      <div style="font-size:13px;color:#5a6259">Residence Application</div>
+    </div>
+  </div>
+
+  <h2>Residence Application</h2>
+  <p class="note">Complete the information below. Your application will be submitted securely to Aunt Nancy Residence.</p>
+
+  <form id="appform">
+
+    <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true"
+           style="position:absolute;left:-9999px">
+
+    <div class="row">
+      <div class="field">
+        <label>Full legal name</label>
+        <input name="name" required>
+      </div>
+
+      <div class="field">
+        <label>Date of birth</label>
+        <input name="date_of_birth" type="date" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Phone</label>
+        <input name="phone" type="tel" required>
+      </div>
+
+      <div class="field">
+        <label>Email</label>
+        <input name="email" type="email" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Current address</label>
+      <input name="address">
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Requested move-in date</label>
+        <input name="movein" type="date">
+      </div>
+
+      <div class="field">
+        <label>Referred by</label>
+        <input name="referred_by">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Current housing situation</label>
+      <select name="housing">
+        <option value="">Choose one</option>
+        <option>Living with family/friends</option>
+        <option>Treatment or transitional program</option>
+        <option>Another recovery residence</option>
+        <option>Temporary housing</option>
+        <option>Currently unhoused</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Work / school status</label>
+        <select name="status">
+          <option value="">Choose one</option>
+          <option>Working</option>
+          <option>In school/training</option>
+          <option>Looking for work</option>
+          <option>Receiving benefits/income support</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Approx. monthly income</label>
+        <input name="monthly_income" placeholder="$">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Employer / income source</label>
+      <input name="income_source">
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Emergency contact</label>
+        <input name="emergency_name">
+      </div>
+
+      <div class="field">
+        <label>Emergency phone</label>
+        <input name="emergency_phone" type="tel">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Relationship to emergency contact</label>
+      <input name="emergency_relationship">
+    </div>
+
+    <div class="field">
+      <label>Anything else we should know?</label>
+      <textarea name="notes" rows="4"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Type your full name as your signature</label>
+        <input name="signature" required>
+      </div>
+
+      <div class="field">
+        <label>Date</label>
+        <input name="signature_date" type="date" required>
+      </div>
+    </div>
+
+    <div class="check">
+      <input id="cert" type="checkbox" required>
+      <label for="cert">I certify that the information provided is true and complete to the best of my knowledge.</label>
+    </div>
+
+    <button class="btn submit" id="appSubmit" type="submit">Submit Application</button>
+
+    <p class="small" id="appError" style="display:none;color:#8a2020"></p>
+
+    <p class="small">Questions? Call 310.957.4414.</p>
+
+  </form>
+</div>
 <div class="success" id="applySuccess"><h2>Application received.</h2><p>Thank you. Aunt Nancy Residence received your application and will use the contact information you provided to follow up.</p></div>
 </div></dialog>
 
